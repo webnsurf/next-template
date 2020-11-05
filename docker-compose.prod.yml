@@ -1,0 +1,22 @@
+version: '3.5'
+
+services:
+  next:
+    container_name: next
+    image: ${COMPOSE_IMAGE}
+    ports:
+      - 80
+    labels:
+      traefik.enable: true
+      traefik.http.routers.next-redirect.rule: ${COMPOSE_ROUTER_HOST}
+      traefik.http.routers.next-redirect.middlewares: https-redirect@file
+      traefik.http.routers.next-redirect.entrypoints: web
+
+      traefik.http.routers.next.rule: ${COMPOSE_ROUTER_HOST}
+      traefik.http.routers.next.entrypoints: websecure
+      traefik.http.routers.next.tls: true
+
+networks:
+  default:
+    external:
+      name: webnsurf_network
